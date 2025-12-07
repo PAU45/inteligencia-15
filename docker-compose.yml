@@ -1,0 +1,46 @@
+﻿version: '3'
+services:
+  namenode:
+    image: apache/hadoop:3
+    container_name: namenode
+    hostname: namenode
+    command: ["hdfs", "namenode"]
+    ports:
+      - 9870:9870
+      - 9000:9000
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+    volumes:
+      - namenode_data:/hadoop/dfs/name
+
+  datanode:
+    image: apache/hadoop:3
+    container_name: datanode
+    hostname: datanode
+    command: ["hdfs", "datanode"]
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+    volumes:
+      - datanode_data:/hadoop/dfs/data
+
+  resourcemanager:
+    image: apache/hadoop:3
+    container_name: resourcemanager
+    hostname: resourcemanager
+    command: ["yarn", "resourcemanager"]
+    ports:
+      - 8088:8088
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+
+  nodemanager:
+    image: apache/hadoop:3
+    container_name: nodemanager
+    hostname: nodemanager
+    command: ["yarn", "nodemanager"]
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+
+volumes:
+  namenode_data:
+  datanode_data:
